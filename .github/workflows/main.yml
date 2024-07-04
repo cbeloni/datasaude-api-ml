@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     environment: prod
     runs-on: ubuntu-latest
 
@@ -42,8 +42,36 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: cbeloni/datasaude-api-ml-amd64:latest
+          tags: cbeloni/datasaude-api-ml:latest
 
+  deploy-staging:
+    environment: staging
+    runs-on: ubuntu-latest
+
+    steps:          
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_MGC }}" > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_MGC }}      
+
+      - name: Apply Kubernetes manifests
+        run: |          
+          kubectl apply -f datasaude-api-ml-mgc.yaml --insecure-skip-tls-verify
+          kubectl rollout restart deployment/datasaude-api-ml --insecure-skip-tls-verify
+
+  deploy-production:
+    environment: prod
+    runs-on: ubuntu-latest
+    needs: [ manual_approval ]
+
+    steps:          
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:

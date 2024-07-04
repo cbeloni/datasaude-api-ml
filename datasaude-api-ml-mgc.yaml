@@ -15,7 +15,7 @@ spec:
         app: datasaude-api-ml
     spec:
       containers:
-        - image: cbeloni/datasaude-api-ml-amd64:latest
+        - image: cbeloni/datasaude-api-ml:latest
           name: datasaude-api-ml
           ports:
             - containerPort: 8000
