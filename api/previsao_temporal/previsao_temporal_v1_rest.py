@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from api.previsao_temporal.previsao_temporal_repository import obtem_paciente_service
+from api.previsao_temporal.previsao_temporal_repository import get_paciente_repository, get_previsao_temporal_repository
 from api.previsao_temporal.schemas.exceptions import ExceptionResponseSchema
 
 previsao_temporal_router = APIRouter()
@@ -9,6 +9,21 @@ previsao_temporal_router = APIRouter()
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def get_previsao():
-    pacientes = await obtem_paciente_service()
+async def get_paciente():
+    pacientes = await get_paciente_repository()
     return pacientes
+
+@previsao_temporal_router.get("/previsao",
+                             response_model={},
+                             response_model_exclude={},
+                             responses={"400": {"model": ExceptionResponseSchema}})
+async def get_previsao():
+    pacientes = await get_previsao_temporal_repository()
+    return pacientes
+
+@previsao_temporal_router.post("",
+                             response_model={},
+                             response_model_exclude={},
+                             responses={"400": {"model": ExceptionResponseSchema}})
+async def post_previsao():
+    return "sucess"
