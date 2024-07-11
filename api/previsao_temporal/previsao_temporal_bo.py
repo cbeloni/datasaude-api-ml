@@ -37,8 +37,11 @@ async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int, cid
     paciente_previsao = None
     for forecast_dt in forecast_df.iterrows():
         data = forecast_dt[1]['data']
-        valor_previsao = int(forecast_dt[1]['valor_previsao'])
-        paciente_previsao = PacientePrevisaoSchema(data=data, valor_previsao=valor_previsao)
+        valor_previsao = forecast_dt[1]['valor_previsao']
+        if valor_previsao is None:
+            continue
+
+        paciente_previsao = PacientePrevisaoSchema(data=data, valor_previsao=int(valor_previsao))
         await upsert_paciente_previsao_by_data_repository(paciente_previsao)
         result.append(paciente_previsao)
     await clean_paciente_previsao_after_data_repository(paciente_previsao)
