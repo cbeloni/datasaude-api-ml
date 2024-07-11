@@ -31,3 +31,8 @@ async def upsert_paciente_previsao_by_data_repository(paciente_previsao: Pacient
         return await update_paciente_previsao_by_data_repository(paciente_previsao)
     else:
         return await insert_previsao_temporal_repository(paciente_previsao)
+
+async def clean_paciente_previsao_after_data_repository(paciente_previsao: PacientePrevisaoSchema):
+    result = await session.execute(clean_paciente_previsao_after_data(), paciente_previsao.model_dump())
+    await session.commit()
+    return result

@@ -3,7 +3,10 @@ import json
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-from api.previsao_temporal.previsao_temporal_repository import get_previsao_temporal_repository
+from api.previsao_temporal.previsao_temporal_repository import 
+    get_previsao_temporal_repository, 
+    upsert_paciente_previsao_by_data_repository,
+    clean_paciente_previsao_after_data_repository
 from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 
 def gera_csv_paciente_previsao_temporal(pacientes_previsoes) -> PacientePrevisaoSchema:
@@ -35,11 +38,12 @@ async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int):
         'valor_previsao': forecast.values
     })
     result = []
+    paciente_previsao = None
     for forecast_dt in forecast_df.iterrows():
         data = forecast_dt[1]['data']
         valor_previsao = forecast_dt[1]['valor_previsao']
-        result.append({
-            'data': data,
-            'valor_previsao': valor_previsao
-        })
+        paciente_previsao = PacientePrevisaoSchema(data=data, valor_previsao=valor_previsao)
+        await upsert_paciente_previsao_by_data_repository(paciente_previsao)
+        result.append(paciente_previsao)
+    await clean_paciente_previsao_after_data_repository(paciente_previsao)
     return result
