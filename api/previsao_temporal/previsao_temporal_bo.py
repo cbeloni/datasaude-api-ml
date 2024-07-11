@@ -30,7 +30,7 @@ async def treinar_modelo(qtd_dias_previsao: int):
     df.set_index('DT_ATENDIMENTO', inplace=True)
     ts = df['ATENDIMENTOS']
     model = ExponentialSmoothing(ts, trend='add', seasonal='add', seasonal_periods=90).fit()
-    forecast = model.forecast(steps=120)
+    forecast = model.forecast(steps=qtd_dias_previsao)
     forecast_df = pd.DataFrame({
         'data': forecast.index.strftime('%Y-%m-%d'),
         'valor_previsao': forecast.values
