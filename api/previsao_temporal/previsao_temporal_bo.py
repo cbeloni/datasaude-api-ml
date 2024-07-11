@@ -23,13 +23,13 @@ async def load_df():
     df = pd.read_csv('dados_treino.csv', sep='|')
     return df
 
-async def treinar_modelo(qtd_dias_previsao: int):    
+async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int):    
     df = await load_df()
     # print(df.head().to_dict(orient='records'))
     df['DT_ATENDIMENTO'] = pd.to_datetime(df['DT_ATENDIMENTO'])
     df.set_index('DT_ATENDIMENTO', inplace=True)
     ts = df['ATENDIMENTOS']
-    model = ExponentialSmoothing(ts, trend='add', seasonal='add', seasonal_periods=90).fit()
+    model = ExponentialSmoothing(ts, trend='add', seasonal='add', seasonal_periods=qtd_dias_sazonalidade).fit()
     forecast = model.forecast(steps=qtd_dias_previsao)
     forecast_df = pd.DataFrame({
         'data': forecast.index.strftime('%Y-%m-%d'),
