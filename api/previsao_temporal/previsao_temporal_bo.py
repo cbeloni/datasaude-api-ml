@@ -7,9 +7,8 @@ from api.previsao_temporal.previsao_temporal_repository import get_previsao_temp
 from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 
 def gera_csv_paciente_previsao_temporal(pacientes_previsoes) -> PacientePrevisaoSchema:
-    pacientes_previsoes_list = []
     nome_arquivo = 'dados_treino.csv'
-    with open(nome_arquivo, 'a') as file:
+    with open(nome_arquivo, 'w') as file:
         file.truncate(0)
         file.write("DT_ATENDIMENTO|ATENDIMENTOS" + '\n')        
         for paciente_previsao in pacientes_previsoes:
@@ -19,7 +18,7 @@ def gera_csv_paciente_previsao_temporal(pacientes_previsoes) -> PacientePrevisao
 
 async def load_df():
     pacientes_previsoes = await get_previsao_temporal_repository()
-    # gera_csv_paciente_previsao_temporal(pacientes_previsoes)
+    gera_csv_paciente_previsao_temporal(pacientes_previsoes)
     df = pd.read_csv('dados_treino.csv', sep='|')
     return df
 
