@@ -44,5 +44,6 @@ async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int, cid
             result.append(paciente_previsao)
         except:
             continue
-    await clean_paciente_previsao_after_data_repository(paciente_previsao)
+    if (paciente_previsao is not None):
+        await clean_paciente_previsao_after_data_repository(paciente_previsao)
     return result
