@@ -27,5 +27,6 @@ async def get_previsao():
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
 async def post_treinar_previsao(qtd_dias_previsao: int = 120, 
-                                qtd_dias_sazonalidade: int = 90,):
-    return await treinar_modelo(qtd_dias_previsao, qtd_dias_sazonalidade)
+                                qtd_dias_sazonalidade: int = 90,
+                                cid: str = 'TODOS'):
+    return await treinar_modelo(qtd_dias_previsao, qtd_dias_sazonalidade, cid)

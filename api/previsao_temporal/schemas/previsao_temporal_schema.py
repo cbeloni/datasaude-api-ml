@@ -4,11 +4,11 @@ from typing import Optional
 
 
 class PacientePrevisaoSchema(BaseModel):
-    id: int = Field(..., description="ID")
-    data: date = Field(..., description="Data")
+    id: Optional[int] = Field(None, description="ID")
+    data: Optional[date] = Field(None, description="Data")
     valor_historico: Optional[int] = Field(None, description="Valor histórico")
     valor_previsao: Optional[int] = Field(None, description="Valor previsão")
-    cid: str = Field("TODOS", description="CID")
+    cid: Optional[str] = Field("TODOS", description="CID")
 
     class Config:
         orm_mode = True
