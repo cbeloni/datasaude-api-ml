@@ -18,9 +18,22 @@ def query_paciente_previsao():
                 SELECT id, data, valor_historico, valor_previsao
                   FROM paciente_previsao
                 """)    
+def query_paciente_previsao_by_data():
+    return text(""" 
+                SELECT id, data, valor_historico, valor_previsao
+                  FROM paciente_previsao
+                 WHERE data = :data
+                """)
     
 def insert_paciente_previsao():
     return text(""" 
                 INSERT INTO paciente_previsao (id, data, valor_historico, valor_previsao)
                 VALUES (:id, :data, :valor_historico, :valor_previsao)
+                """)
+    
+def update_paciente_previsao_by_data():
+    return text(""" 
+                UPDATE paciente_previsao
+                   SET valor_historico = :valor_historico, valor_previsao = :valor_previsao
+                 WHERE data = :data
                 """)

@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from api.previsao_temporal.previsao_temporal_bo import treinar_modelo
 from api.previsao_temporal.previsao_temporal_repository import get_paciente_repository, get_previsao_temporal_repository
 from api.previsao_temporal.schemas.exceptions import ExceptionResponseSchema
 
@@ -21,9 +22,9 @@ async def get_previsao():
     pacientes = await get_previsao_temporal_repository()
     return pacientes
 
-@previsao_temporal_router.post("",
+@previsao_temporal_router.post("/treinar",
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def post_previsao():
-    return "sucess"
+async def post_treinar_previsao(qtd_dias_previsao: int = 120):
+    return await treinar_modelo(qtd_dias_previsao)
