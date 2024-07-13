@@ -1,4 +1,4 @@
-from api.previsao_temporal.queries import clean_paciente_previsao_after_data, insert_paciente_previsao, query_paciente_previsao_by_data, query_pacientes, query_paciente_previsao, update_paciente_previsao_by_data
+from api.previsao_temporal.queries import clean_paciente_previsao_after_data, delete_unnecessary_paciente_previsao_after_data, insert_paciente_previsao, query_paciente_previsao_by_data, query_pacientes, query_paciente_previsao, update_paciente_previsao_by_data
 from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 from core.config.session import session
 
@@ -34,5 +34,10 @@ async def upsert_paciente_previsao_by_data_repository(paciente_previsao: Pacient
 
 async def clean_paciente_previsao_after_data_repository(paciente_previsao: PacientePrevisaoSchema):
     result = await session.execute(clean_paciente_previsao_after_data(), paciente_previsao.model_dump())
+    await session.commit()
+    return result
+
+async def delete_unnecessary_paciente_previsao_after_data_repository(paciente_previsao: PacientePrevisaoSchema):
+    result = await session.execute(delete_unnecessary_paciente_previsao_after_data(), paciente_previsao.model_dump())
     await session.commit()
     return result

@@ -18,6 +18,7 @@ def query_paciente_previsao():
                 SELECT id, data, valor_historico, valor_previsao
                   FROM paciente_previsao
                  WHERE cid = :cid
+                   AND valor_historico is not null
                 """)    
 def query_paciente_previsao_by_data():
     return text(""" 
@@ -45,6 +46,15 @@ def clean_paciente_previsao_after_data():
     return text(""" 
                 UPDATE paciente_previsao
                    SET valor_previsao = null
-                 WHERE data >= :data
+                 WHERE data > :data
                    AND cid = :cid
-                """)                
+                """)
+  
+def delete_unnecessary_paciente_previsao_after_data():
+    return text(""" 
+                DELETE FROM paciente_previsao
+                 WHERE data > :data
+                   AND cid = :cid
+                   AND valor_previsao is null
+                   AND valor_historico is null
+                """)
