@@ -1,21 +1,21 @@
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
-from api.previsao_temporal.previsao_temporal_repository import get_previsao_temporal_repository, upsert_paciente_previsao_by_data_repository, clean_paciente_previsao_after_data_repository, delete_unnecessary_paciente_previsao_after_data_repository
+from api.previsao_temporal.previsao_temporal_repository import get_previsao_temporal_historico_not_null_repository, upsert_paciente_previsao_by_data_repository, clean_paciente_previsao_after_data_repository, delete_unnecessary_paciente_previsao_after_data_repository
 from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 
 def gera_csv_paciente_previsao_temporal(pacientes_previsoes) -> PacientePrevisaoSchema:
     nome_arquivo = 'dados_treino.csv'
     with open(nome_arquivo, 'w') as file:
         file.truncate(0)
-        file.write("DT_ATENDIMENTO|ATENDIMENTOS" + '\n')        
+        file.write("DT_ATENDIMENTO|ATENDIMENTOS" + '\n')
         for paciente_previsao in pacientes_previsoes:
             paciente_previsao = PacientePrevisaoSchema(**paciente_previsao)
             file.write(f"{paciente_previsao.data}|{paciente_previsao.valor_historico}" + '\n')
         
 
 async def load_df(paciente_previsao: PacientePrevisaoSchema):
-    pacientes_previsoes = await get_previsao_temporal_repository(paciente_previsao)
+    pacientes_previsoes = await get_previsao_temporal_historico_not_null_repository(paciente_previsao)
     gera_csv_paciente_previsao_temporal(pacientes_previsoes)
     df = pd.read_csv('dados_treino.csv', sep='|')
     return df

@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 
 from api.previsao_temporal.previsao_temporal_bo import treinar_modelo
-from api.previsao_temporal.previsao_temporal_repository import get_paciente_repository, get_previsao_temporal_repository
+from api.previsao_temporal.previsao_temporal_repository import get_paciente_repository, get_previsao_temporal_cid_repository
 from api.previsao_temporal.schemas.exceptions import ExceptionResponseSchema
+from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 
 previsao_temporal_router = APIRouter()
 
@@ -10,7 +11,7 @@ previsao_temporal_router = APIRouter()
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def get_paciente():
+async def get_pacientes():
     pacientes = await get_paciente_repository()
     return pacientes
 
@@ -18,8 +19,11 @@ async def get_paciente():
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def get_previsao():
-    pacientes = await get_previsao_temporal_repository()
+async def get_previsao(cid: str = 'TODOS'):
+    
+    paciente_previsao: PacientePrevisaoSchema = PacientePrevisaoSchema(cid=cid)
+    
+    pacientes = await get_previsao_temporal_cid_repository(paciente_previsao)
     return pacientes
 
 @previsao_temporal_router.post("/treinar",

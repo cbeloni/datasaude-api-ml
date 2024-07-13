@@ -1,4 +1,4 @@
-from api.previsao_temporal.queries import clean_paciente_previsao_after_data, delete_unnecessary_paciente_previsao_after_data, insert_paciente_previsao, query_paciente_previsao_by_data, query_pacientes, query_paciente_previsao, update_paciente_previsao_by_data
+from api.previsao_temporal.queries import clean_paciente_previsao_after_data, delete_unnecessary_paciente_previsao_after_data, insert_paciente_previsao, query_paciente_cid_previsao, query_paciente_previsao_by_data, query_paciente_previsao_historico_not_null, query_pacientes, update_paciente_previsao_by_data
 from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
 from core.config.session import session
 
@@ -7,8 +7,12 @@ async def get_paciente_repository():
     pacientes = (await session.execute(query_pacientes(), {"poluente": "MP10", "dt_atendimento":"2022-01-01"})).mappings().all()
     return pacientes
 
-async def get_previsao_temporal_repository(paciente_previsao: PacientePrevisaoSchema):
-    previsoes = (await session.execute(query_paciente_previsao(), paciente_previsao.model_dump())).mappings().all()
+async def get_previsao_temporal_historico_not_null_repository(paciente_previsao: PacientePrevisaoSchema):
+    previsoes = (await session.execute(query_paciente_previsao_historico_not_null(), paciente_previsao.model_dump())).mappings().all()
+    return previsoes
+
+async def get_previsao_temporal_cid_repository(paciente_previsao: PacientePrevisaoSchema):
+    previsoes = (await session.execute(query_paciente_cid_previsao(), paciente_previsao.model_dump())).mappings().all()
     return previsoes
 
 async def insert_previsao_temporal_repository(paciente_previsao: PacientePrevisaoSchema):

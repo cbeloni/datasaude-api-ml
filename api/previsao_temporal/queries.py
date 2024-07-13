@@ -13,13 +13,21 @@ def query_pacientes():
            AND pc.latitude is not null;
     """)
     
-def query_paciente_previsao():
+def query_paciente_previsao_historico_not_null():
     return text(""" 
                 SELECT id, data, valor_historico, valor_previsao
                   FROM paciente_previsao
                  WHERE cid = :cid
                    AND valor_historico is not null
                 """)    
+
+def query_paciente_cid_previsao():
+    return text(""" 
+                SELECT id, data, valor_historico, valor_previsao
+                  FROM paciente_previsao
+                 WHERE cid = :cid
+                """)    
+    
 def query_paciente_previsao_by_data():
     return text(""" 
                 SELECT id, data, valor_historico, valor_previsao
