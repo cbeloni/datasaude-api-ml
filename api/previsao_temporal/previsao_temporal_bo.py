@@ -39,7 +39,7 @@ async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int, cid
         try:
             data = forecast_dt[1]['data']
             valor_previsao = int(forecast_dt[1]['valor_previsao'])
-            paciente_previsao = PacientePrevisaoSchema(data=data, valor_previsao=valor_previsao)
+            paciente_previsao = PacientePrevisaoSchema(data=data, valor_previsao=valor_previsao, cid=cid)
             await upsert_paciente_previsao_by_data_repository(paciente_previsao)
             result.append(paciente_previsao)
         except:
