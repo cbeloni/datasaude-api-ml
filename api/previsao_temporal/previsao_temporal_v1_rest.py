@@ -32,8 +32,9 @@ async def get_previsao(cid: str = 'TODOS'):
                              responses={"400": {"model": ExceptionResponseSchema}})
 async def post_treinar_previsao(qtd_dias_previsao: int = 120, 
                                 qtd_dias_sazonalidade: int = 90,
-                                cid: str = 'TODOS'):
+                                cid: str = 'TODOS',
+                                tipo_analise: str = 'ATENDIMENTO'):
     try:
-        return await treinar_modelo(qtd_dias_previsao, qtd_dias_sazonalidade, cid)
+        return await treinar_modelo(qtd_dias_previsao, qtd_dias_sazonalidade, cid, tipo_analise)
     except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))

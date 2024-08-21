@@ -18,6 +18,7 @@ def query_paciente_previsao_historico_not_null():
                 SELECT id, data, valor_historico, valor_previsao
                   FROM paciente_previsao
                  WHERE cid = :cid
+                   AND tipo_analise = :tipo_analise
                    AND valor_historico is not null
                 """)    
 
@@ -26,6 +27,7 @@ def query_paciente_cid_previsao():
                 SELECT id, data, valor_historico, valor_previsao
                   FROM paciente_previsao
                  WHERE cid = :cid
+                   AND tipo_analise = :tipo_analise
                 """)    
     
 def query_paciente_previsao_by_data():
@@ -34,12 +36,13 @@ def query_paciente_previsao_by_data():
                   FROM paciente_previsao
                  WHERE data = :data
                    AND cid = :cid
+                   AND tipo_analise = :tipo_analise
                 """)
     
 def insert_paciente_previsao():
     return text(""" 
-                INSERT INTO paciente_previsao (id, data, valor_historico, valor_previsao, cid)
-                VALUES (:id, :data, :valor_historico, :valor_previsao, :cid)
+                INSERT INTO paciente_previsao (id, data, valor_historico, valor_previsao, cid, tipo_analise)
+                VALUES (:id, :data, :valor_historico, :valor_previsao, :cid, :tipo_analise)
                 """)
     
 def update_paciente_previsao_by_data():
@@ -48,6 +51,7 @@ def update_paciente_previsao_by_data():
                    SET valor_historico = :valor_historico, valor_previsao = :valor_previsao
                  WHERE data = :data
                    AND cid = :cid
+                   AND tipo_analise = :tipo_analise
                 """)
 
 def clean_paciente_previsao_after_data():
@@ -56,6 +60,7 @@ def clean_paciente_previsao_after_data():
                    SET valor_previsao = null
                  WHERE data > :data
                    AND cid = :cid
+                   AND tipo_analise = :tipo_analise
                 """)
   
 def delete_unnecessary_paciente_previsao_after_data():
@@ -65,4 +70,5 @@ def delete_unnecessary_paciente_previsao_after_data():
                    AND cid = :cid
                    AND valor_previsao is null
                    AND valor_historico is null
+                   AND tipo_analise = :tipo_analise
                 """)

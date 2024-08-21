@@ -9,6 +9,7 @@ class PacientePrevisaoSchema(BaseModel):
     valor_historico: Optional[int] = Field(None, description="Valor histórico")
     valor_previsao: Optional[int] = Field(None, description="Valor previsão")
     cid: Optional[str] = Field("TODOS", description="CID")
+    tipo_analise: Optional[str] = Field("ATENDIMENTO", description="Tipo de Análise")
 
     class Config:
         orm_mode = True

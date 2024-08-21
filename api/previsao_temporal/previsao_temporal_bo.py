@@ -20,8 +20,8 @@ async def load_df(paciente_previsao: PacientePrevisaoSchema):
     df = pd.read_csv('dados_treino.csv', sep='|')
     return df
 
-async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int, cid: str): 
-    paciente_previsao = PacientePrevisaoSchema(cid=cid)
+async def treinar_modelo(qtd_dias_previsao: int, qtd_dias_sazonalidade: int, cid: str, tipo_analise: str): 
+    paciente_previsao = PacientePrevisaoSchema(cid=cid, tipo_analise=tipo_analise)
     df = await load_df(paciente_previsao)
     # print(df.head().to_dict(orient='records'))
     df['DT_ATENDIMENTO'] = pd.to_datetime(df['DT_ATENDIMENTO'])
