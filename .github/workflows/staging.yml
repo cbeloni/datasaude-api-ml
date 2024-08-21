@@ -28,7 +28,7 @@ jobs:
 
       - uses: danielr1996/envsubst-action@1.0.0
         env:
-            MYSQL_HOST: '${{ secrets.MYSQL_HOST_MGC }}'
+            MYSQL_HOST: '${{ secrets.MYSQL_HOST_ARM }}'
             MYSQL_DATABASE: '${{ secrets.MYSQL_DATABASE }}'
             MYSQL_USER: '${{ secrets.MYSQL_USER }}'
             MYSQL_PASSWORD: '${{ secrets.MYSQL_PASSWORD }}'
@@ -40,9 +40,9 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           push: true
-          tags: cbeloni/datasaude-api-ml:latest
+          tags: cbeloni/datasaude-api-ml:arm64
 
   deploy-staging:
     environment: staging

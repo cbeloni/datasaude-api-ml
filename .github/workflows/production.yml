@@ -42,7 +42,7 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: cbeloni/datasaude-api-ml:latest  
+          tags: cbeloni/datasaude-api-ml:amd64
 
   deploy-production:
     environment: prod
