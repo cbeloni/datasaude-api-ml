@@ -19,9 +19,10 @@ async def get_pacientes():
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def get_previsao(cid: str = 'TODOS'):
+async def get_previsao(cid: str = 'TODOS',
+                       tipo_analise: str = 'ATENDIMENTO'):
     
-    paciente_previsao: PacientePrevisaoSchema = PacientePrevisaoSchema(cid=cid)
+    paciente_previsao: PacientePrevisaoSchema = PacientePrevisaoSchema(cid=cid, tipo_analise=tipo_analise)
     
     pacientes = await get_previsao_temporal_cid_repository(paciente_previsao)
     return pacientes
