@@ -29,3 +29,6 @@ poetry install
 
 # iniciar a aplicação
 python main.py
+
+# adicionado argocd
+# https://localhost:8095/applications
