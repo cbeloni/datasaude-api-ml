@@ -23,12 +23,12 @@ def query_paciente_previsao_historico_not_null():
                 """)    
 
 def query_paciente_cid_previsao():
-    return text(""" 
-                SELECT id, data, valor_historico, valor_previsao
-                  FROM paciente_previsao
-                 WHERE cid = :cid
-                   AND tipo_analise = :tipo_analise
-                """)    
+    return """ 
+            SELECT id, data, valor_historico, valor_previsao
+              FROM paciente_previsao
+              WHERE cid = :cid
+                AND tipo_analise = :tipo_analise                   
+            """
     
 def query_paciente_previsao_by_data():
     return text(""" 

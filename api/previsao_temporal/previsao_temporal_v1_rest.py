@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from api.previsao_temporal.previsao_temporal_bo import treinar_modelo
 from api.previsao_temporal.previsao_temporal_repository import get_paciente_repository, get_previsao_temporal_cid_repository
 from api.previsao_temporal.schemas.exceptions import ExceptionResponseSchema
-from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoSchema
+from api.previsao_temporal.schemas.previsao_temporal_schema import PacientePrevisaoRequest, PacientePrevisaoSchema
 
 previsao_temporal_router = APIRouter()
 
@@ -19,10 +19,9 @@ async def get_pacientes():
                              response_model={},
                              response_model_exclude={},
                              responses={"400": {"model": ExceptionResponseSchema}})
-async def get_previsao(cid: str = 'TODOS',
-                       tipo_analise: str = 'ATENDIMENTO'):
+async def get_previsao(filtros: PacientePrevisaoRequest = Depends()):
     
-    paciente_previsao: PacientePrevisaoSchema = PacientePrevisaoSchema(cid=cid, tipo_analise=tipo_analise)
+    paciente_previsao: PacientePrevisaoSchema = PacientePrevisaoSchema(**filtros.model_dump())
     
     pacientes = await get_previsao_temporal_cid_repository(paciente_previsao)
     return pacientes
